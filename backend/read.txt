@@ -1,0 +1,2 @@
+# 重新生成依赖文件
+pip freeze > requirements.txt

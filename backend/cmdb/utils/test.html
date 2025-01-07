@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>{{ connect.host_name }}</title>
+{#    要在浏览器上开始使用xterm.js，请将xterm.js和xterm.css添加到html页面的头部。然后创建一个#}
+    <link href="/static/xterm/xterm.css" rel="stylesheet" type="text/css"/>
+    <style>
+        body {
+            background-color: black
+        }
+</style>
+</head>
+
+
+<body>
+<div id="terminal"></div>
+</body>
+<script src="/static/layui/layui.js"></script>
+<script>
+    layui.use(['table','layer'], function() {
+        var $ = layui.jquery;
+
+
+        var layer = layui.layer;
+
+
+        //get_box_size方法是根据浏览器窗口大小除以个字符所占用的大小计算出cols和rows的值，无论是xterm.js还是Paramiko都是根据这两个值来调整窗口大小的
+        function get_box_size() {
+            //init_width和init_height是终端默认的高度和宽度
+            let init_width = 9;
+            let init_height = 18;
+            let windows_width = $('#terminal').width();
+            let windows_height = $(window).height();
+            return {
+                cols: Math.floor(windows_width / init_width),
+                rows: Math.floor(windows_height / init_height),
+            }
+        }
+
+
+        let cols = get_box_size().cols;
+        let rows = get_box_size().rows;
+        //根据div的大小初始化终端，待WebSocket连接上后，显示终端
+        let term = new Terminal(
+            {
+                cursorBlink: true,
+                rows: rows,
+                cols: cols,
+                useStyle: true,
+            });
+
+
+        term.open(document.getElementById('terminal'));
+        let host_ip = '{{ connect.host_ip }}';
+        let host_name = '{{ connect.host_name }}';
+        let host_port = '{{ connect.host_port }}';
+        let sys_user_name = '{{ connect.sys_user_name }}';
+        let sys_user_passwd = '{{ connect.sys_user_passwd }}';
+        let ws = new WebSocket('ws://' + window.location.host + '/asset/terminal/' + '?host_ip=' + host_ip + '&host_name=' + host_name + '&host_port=' + host_port + '&sys_user_name=' + sys_user_name + '&sys_user_passwd=' + sys_user_passwd);
+
+
+        //创建好websocket连接后，自动触发onopen(服务端执行self.accept成功后)，用于指定连接成功后的回调函数
+        ws.onopen = function () {
+            // 实时监控输入的字符串发送到后端 term.on实时监听，控制端是否有字符输入，有的话，发送到webscoket通道里面
+            //data为每个按键输入内容,例如按A，就传递给后端：{'flag': 1, 'data': 'a', 'cols': None, 'rows': None}
+            term.on('data', function (data) {
+                let send_data = JSON.stringify({
+                    'flag': 'entered_key',
+                    'entered_key': data,
+                    'cols': null,
+                    'rows': null
+                });
+                //send是把数据发送到后端
+                ws.send(send_data);
+            });
+            ws.onerror = function (event) {
+                console.log('error:' + e);
+            };
+            //WebSockets是一个基于事件的API,当websocket接收到服务端发来的消息，会自动触发这个函数，并写入终端
+            ws.onmessage = function (event) {
+                term.write(event.data);
+            };
+            //websocket断开连接，服务端主动断开连接时，这个方法也被触发
+            ws.onclose = function (event) {
+                term.write('\n\r\x1B[1;3;31m连接关闭！\x1B[0m');
+            };
+        };
+        //通过$(windows).resize()检测浏览器串口的变化，一旦发送变化，发送一个resize标记的数据Django，同时传递新的cols和rows给后端
+        $(window).resize(function () {
+            let cols = get_box_size().cols;
+            let rows = get_box_size().rows;
+            let send_data = JSON.stringify({'flag': 'resize', 'cols': cols, 'rows': rows});
+            ws.send(send_data);
+            term.resize(cols, rows)
+        })
+    });
+</script>
+
+
+</html>

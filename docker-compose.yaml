@@ -1,0 +1,75 @@
+version: "3"
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    hostname: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root123@abc111
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    command: --default-authentication-plugin=mysql_native_password
+    networks:
+      - cmdb-network
+
+  redis:
+    image: redis:6.2
+    container_name: redis
+    hostname: redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes --requirepass redis123@abc111
+    networks:
+      - cmdb-network
+
+  cmdb-backend:
+    build: ./backend
+    container_name: cmdb-backend
+    hostname: cmdb-backend
+    restart: always
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mysql
+      - redis
+    environment:
+      - DATABASE_HOST=mysql
+      - DATABASE_PORT=3306
+      - DATABASE_USER=root
+      - DATABASE_PASSWORD=root123@abc111
+      - DATABASE_NAME=cmdb
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=redis123@abc111
+    networks:
+      - cmdb-network
+    volumes:
+      - ./cmdb/media:/media
+      - ./cmdb/logs:/logs
+
+  cmdb-front:
+    build: ./front
+    container_name: cmdb-front
+    hostname: cmdb-front
+    restart: always
+    ports:
+      - "8001:80"
+    depends_on:
+      - cmdb-backend
+    volumes:
+      - ./cmdb/media:/media
+      - ./cmdb/static:/static
+    environment:
+      - VUE_APP_API_URL=http://cmdb-backend:8000
+    networks:
+      - cmdb-network
+
+networks:
+  cmdb-network:
+    driver: bridge

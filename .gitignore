@@ -1,0 +1,15 @@
+backend/logs/*
+backend/.idea/*
+backend/media/*
+backend/*.pyc
+backend/*.pyo
+backend/*.pyd
+backend/__pycache__/
+.DS_Store
+backend/media/
+backend/logs/
+backend/.idea/*
+front/node_modules/
+front/dist/
+front/.idea/*
+

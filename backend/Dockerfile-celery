@@ -1,0 +1,6 @@
+FROM python:3.9.18-bullseye
+WORKDIR /app
+COPY requirements.txt .
+RUN python3 -m pip install -i https://mirrors.aliyun.com/pypi/simple -r requirements.txt
+COPY . .
+CMD ["supervisord","-c","supervisord-celery.conf"]
