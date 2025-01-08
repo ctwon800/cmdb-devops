@@ -11,6 +11,7 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root123@abc111
+      MYSQL_DATABASE: cmdb
     ports:
       - "3306:3306"
     volumes:
@@ -56,6 +57,7 @@ services:
     volumes:
       - ./cmdb/media:/media
       - ./cmdb/logs:/logs
+      - ./backend:/app
 
   cmdb-front:
     build: ./front

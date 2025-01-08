@@ -56,14 +56,30 @@ class DataVViewSet(GenericViewSet):
         :param request:
         :return:
         """
-        domain_total = DomainMonitors.objects.all().count()
-        # 取出快过期的一个域名和剩余天数
-        domain_expiring_soon = DomainMonitors.objects.order_by("domain_expire_days")[:1]
-        for i in domain_expiring_soon:
-            domain_expiring_soon_name = i.domain_name
-            domain_expiring_soon_days = i.domain_expire_days
+        # 初始化所有变量的默认值
+        domain_total = 0
+        domain_expiring_soon_name = ""
+        domain_expiring_soon_days = 0
+        
+        try:
+            domain_total = DomainMonitors.objects.all().count()
+            # 取出快过期的一个域名和剩余天数
+            domain_expiring_soon = DomainMonitors.objects.order_by("domain_expire_days").first()
+            if domain_expiring_soon:
+                domain_expiring_soon_name = domain_expiring_soon.domain_name
+                domain_expiring_soon_days = domain_expiring_soon.domain_expire_days
+                
+        except Exception as e:
+            print(f"获取域名详情出错: {str(e)}")
 
-        return DetailResponse(data={"domain_total": domain_total, "domain_expiring_soon_name": domain_expiring_soon_name, "domain_expiring_soon_days": domain_expiring_soon_days}, msg="获取成功")
+        return DetailResponse(
+            data={
+                "domain_total": domain_total,
+                "domain_expiring_soon_name": domain_expiring_soon_name,
+                "domain_expiring_soon_days": domain_expiring_soon_days
+            },
+            msg="获取成功"
+        )
 
     @action(methods=["GET"], detail=False, permission_classes=[IsAuthenticated])
     def ssl_detail(self, request):
@@ -72,14 +88,30 @@ class DataVViewSet(GenericViewSet):
         :param request:
         :return:
         """
-        ssl_total = SSLMonitors.objects.all().count()
-        # 取出快过期的一个域名和剩余天数
-        ssl_expiring_soon = SSLMonitors.objects.filter(ssl_expire_days__isnull=False).order_by("ssl_expire_days")[:1]
-        for i in ssl_expiring_soon:
-            ssl_expiring_soon_name = i.ssl_domain
-            ssl_expiring_soon_days = i.ssl_expire_days
-            print(ssl_expiring_soon_name, ssl_expiring_soon_days)
-        return DetailResponse(data={"ssl_total": ssl_total, "ssl_expiring_soon_name": ssl_expiring_soon_name, "ssl_expiring_soon_days": ssl_expiring_soon_days}, msg="获取成功")
+        # 初始化默认值
+        ssl_total = 0
+        ssl_expiring_soon_name = ""
+        ssl_expiring_soon_days = 0
+        
+        try:
+            ssl_total = SSLMonitors.objects.all().count()
+            # 取出快过期的一个域名和剩余天数
+            ssl_expiring_soon = SSLMonitors.objects.filter(ssl_expire_days__isnull=False).order_by("ssl_expire_days").first()
+            if ssl_expiring_soon:
+                ssl_expiring_soon_name = ssl_expiring_soon.ssl_domain
+                ssl_expiring_soon_days = ssl_expiring_soon.ssl_expire_days
+                
+        except Exception as e:
+            print(f"获取SSL证书详情出错: {str(e)}")
+            
+        return DetailResponse(
+            data={
+                "ssl_total": ssl_total,
+                "ssl_expiring_soon_name": ssl_expiring_soon_name,
+                "ssl_expiring_soon_days": ssl_expiring_soon_days
+            },
+            msg="获取成功"
+        )
 
 
 

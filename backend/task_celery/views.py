@@ -18,6 +18,17 @@ from django.db.models.functions import Lower
 from celery import current_app
 from task_celery.tasks import *
 
+class PeriodicTaskInitSerializer(CustomModelSerializer):
+    """
+    初始化获取数信息(用于生成初始化json文件)
+    """
+
+    class Meta:
+        model = PeriodicTask
+        fields = ["name", "task", "enabled", "description", "crontab"]
+        read_only_fields = ['id']
+
+
 class CrontabScheduleSerializer(serializers.ModelSerializer):
     # 优化返回的 crontab 信息
     crontab_string = serializers.SerializerMethodField()

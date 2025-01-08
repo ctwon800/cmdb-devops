@@ -670,7 +670,7 @@
     "component_name": "",
     "status": true,
     "cache": false,
-    "visible": true,
+    "visible": false,
     "parent": null,
     "children": [
       {
@@ -700,7 +700,7 @@
         "component_name": "ldapManagement",
         "status": true,
         "cache": false,
-        "visible": true,
+        "visible": false,
         "parent": 277,
         "children": [],
         "menu_button": [

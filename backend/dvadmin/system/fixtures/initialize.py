@@ -15,6 +15,7 @@ from dvadmin.system.views.dept import DeptInitSerializer
 from dvadmin.system.views.dictionary import DictionaryInitSerializer
 from dvadmin.system.views.system_config import SystemConfigInitSerializer
 from cmdb.views.server_platform import ServerPlatformInitSerializer
+from task_celery.views import PeriodicTaskInitSerializer
 
 class Initialize(CoreInitialize):
 
@@ -66,6 +67,12 @@ class Initialize(CoreInitialize):
         """
         self.init_base(ServerPlatformInitSerializer, unique_fields=['server_platform'])
 
+    def init_periodic_task(self):
+        """
+        初始化周期任务表
+        """
+        self.init_base(PeriodicTaskInitSerializer, unique_fields=['task'])
+
     def run(self):
         self.init_dept()
         self.init_role()
@@ -75,7 +82,7 @@ class Initialize(CoreInitialize):
         self.init_dictionary()
         self.init_system_config()
         self.init_server_platform()
-
+        self.init_periodic_task()
 
 
 if __name__ == "__main__":
