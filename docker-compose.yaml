@@ -57,7 +57,7 @@ services:
     volumes:
       - ./cmdb/media:/media
       - ./cmdb/logs:/logs
-      - ./backend:/app
+#      - ./backend:/app
 
   cmdb-front:
     build: ./front
