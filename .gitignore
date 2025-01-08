@@ -12,4 +12,7 @@ backend/.idea/*
 front/node_modules/
 front/dist/
 front/.idea/*
-
+mysql-data/
+redis-data/
+.idea/
+cmdb/

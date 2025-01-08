@@ -1071,100 +1071,6 @@
         ]
       },
       {
-        "name": "间隔时间配置",
-        "icon": "spinner",
-        "sort": 2,
-        "is_link": false,
-        "is_catalog": false,
-        "web_path": "/celeryInterval",
-        "component": "celery/celeryInterval/index",
-        "component_name": "celeryInterval",
-        "status": true,
-        "cache": false,
-        "visible": true,
-        "parent": 288,
-        "children": [],
-        "menu_button": [
-          {
-            "name": "查询",
-            "value": "Search",
-            "api": "/api/celery/task_interval/",
-            "method": 0
-          },
-          {
-            "name": "详情",
-            "value": "Retrieve",
-            "api": "/api/celery/task_interval/{id}/",
-            "method": 0
-          },
-          {
-            "name": "新增",
-            "value": "Create",
-            "api": "/api/celery/task_interval/",
-            "method": 1
-          },
-          {
-            "name": "编辑",
-            "value": "Update",
-            "api": "/api/celery/task_interval/{id}/",
-            "method": 2
-          },
-          {
-            "name": "删除",
-            "value": "Delete",
-            "api": "/api/celery/task_interval/{id}/",
-            "method": 3
-          }
-        ]
-      },
-      {
-        "name": "crontab时间配置",
-        "icon": "calendar",
-        "sort": 3,
-        "is_link": false,
-        "is_catalog": false,
-        "web_path": "/celeryCrontab",
-        "component": "celery/celeryCrontab/index",
-        "component_name": "celeryCrontab",
-        "status": true,
-        "cache": false,
-        "visible": true,
-        "parent": 288,
-        "children": [],
-        "menu_button": [
-          {
-            "name": "查询",
-            "value": "Search",
-            "api": "/api/celery/task_crontab/",
-            "method": 0
-          },
-          {
-            "name": "详情",
-            "value": "Retrieve",
-            "api": "/api/celery/task_crontab/{id}/",
-            "method": 0
-          },
-          {
-            "name": "新增",
-            "value": "Create",
-            "api": "/api/celery/task_crontab/",
-            "method": 1
-          },
-          {
-            "name": "编辑",
-            "value": "Update",
-            "api": "/api/celery/task_crontab/",
-            "method": 2
-          },
-          {
-            "name": "删除",
-            "value": "Delete",
-            "api": "/api/celery/task_crontab/",
-            "method": 3
-          }
-        ]
-      },
-      {
         "name": "任务执行记录",
         "icon": "window-restore",
         "sort": 4,
@@ -1186,6 +1092,12 @@
             "method": 0
           },
           {
+            "name": "执行结果",
+            "value": "tasksResults",
+            "api": "/api/celery/task_results/{id}/",
+            "method": 0
+          },
+          {
             "name": "详情",
             "value": "Retrieve",
             "api": "/api/celery/task_results/{id}/",
@@ -1201,6 +1113,491 @@
             "name": "删除",
             "value": "Delete",
             "api": "/api/celery/task_results/{id}/",
+            "method": 3
+          }
+        ]
+      }
+    ],
+    "menu_button": []
+  },
+  {
+    "name": "资源监控",
+    "icon": "eye",
+    "sort": 4,
+    "is_link": false,
+    "is_catalog": true,
+    "web_path": "",
+    "component": "",
+    "component_name": "",
+    "status": true,
+    "cache": false,
+    "visible": true,
+    "parent": null,
+    "children": [
+      {
+        "name": "证书监控",
+        "icon": "expeditedssl",
+        "sort": 1,
+        "is_link": false,
+        "is_catalog": false,
+        "web_path": "/sslMonitors",
+        "component": "monitors/sslMonitors/index",
+        "component_name": "sslMonitors",
+        "status": true,
+        "cache": false,
+        "visible": true,
+        "parent": 288,
+        "children": [],
+        "menu_button": [
+          {
+            "name": "查询",
+            "value": "Search",
+            "api": "/api/monitors/ssl_monitors/",
+            "method": 0
+          },
+          {
+            "name": "详情",
+            "value": "Retrieve",
+            "api": "/api/monitors/ssl_monitors/{id}/",
+            "method": 0
+          },
+          {
+            "name": "新增",
+            "value": "Create",
+            "api": "/api/monitors/ssl_monitors/",
+            "method": 1
+          },
+          {
+            "name": "编辑",
+            "value": "Update",
+            "api": "/api/monitors/ssl_monitors/{id}/",
+            "method": 2
+          },
+          {
+            "name": "删除",
+            "value": "Delete",
+            "api": "/api/monitors/ssl_monitors/{id}/",
+            "method": 3
+          },
+          {
+            "name": "设置异常",
+            "value": "SetAbnormal",
+            "api": "/api/monitors/ssl_monitors/updateStatus/",
+            "method": 2
+          }
+        ]
+      },
+      {
+        "name": "域名监控",
+        "icon": "wikipedia-w",
+        "sort": 2,
+        "is_link": false,
+        "is_catalog": false,
+        "web_path": "/domainMonitors",
+        "component": "monitors/domainMonitors/index",
+        "component_name": "domainMonitors",
+        "status": true,
+        "cache": false,
+        "visible": true,
+        "parent": 288,
+        "children": [],
+        "menu_button": [
+          {
+            "name": "查询",
+            "value": "Search",
+            "api": "/api/monitors/domain_monitors/",
+            "method": 0
+          },
+          {
+            "name": "详情",
+            "value": "Retrieve",
+            "api": "/api/monitors/domain_monitors/{id}/",
+            "method": 0
+          },
+          {
+            "name": "新增",
+            "value": "Create",
+            "api": "/api/monitors/domain_monitors/",
+            "method": 1
+          },
+          {
+            "name": "编辑",
+            "value": "Update",
+            "api": "/api/monitors/domain_monitors/{id}/",
+            "method": 2
+          },
+          {
+            "name": "删除",
+            "value": "Delete",
+            "api": "/api/monitors/domain_monitors/{id}/",
+            "method": 3
+          }
+        ]
+      },
+      {
+        "name": "站点监控",
+        "icon": "edge",
+        "sort": 1,
+        "is_link": false,
+        "is_catalog": false,
+        "web_path": "/webMonitors",
+        "component": "monitors/webMonitors/index",
+        "component_name": "webMonitors",
+        "status": true,
+        "cache": false,
+        "visible": true,
+        "parent": 288,
+        "children": [],
+        "menu_button": [
+          {
+            "name": "查询",
+            "value": "Search",
+            "api": "/api/monitors/web_monitors/",
+            "method": 0
+          },
+          {
+            "name": "详情",
+            "value": "Retrieve",
+            "api": "/api/monitors/web_monitors/{id}/",
+            "method": 0
+          },
+          {
+            "name": "新增",
+            "value": "Create",
+            "api": "/api/monitors/web_monitors/",
+            "method": 1
+          },
+          {
+            "name": "编辑",
+            "value": "Update",
+            "api": "/api/monitors/web_monitors/{id}/",
+            "method": 2
+          },
+          {
+            "name": "删除",
+            "value": "Delete",
+            "api": "/api/monitors/web_monitors/{id}/",
+            "method": 3
+          },
+          {
+            "name": "设为不监控",
+            "value": "SetUnmonitor",
+            "api": "/api/monitors/web_monitors/{id}/",
+            "method": 2
+          }
+        ]
+      }
+    ],
+    "menu_button": []
+  },
+  {
+    "name": "容器管理",
+    "icon": "connectdevelop",
+    "sort": 4,
+    "is_link": false,
+    "is_catalog": true,
+    "web_path": "",
+    "component": "",
+    "component_name": "",
+    "status": true,
+    "cache": false,
+    "visible": true,
+    "parent": null,
+    "children": [
+      {
+        "name": "集群",
+        "icon": "snowflake-o",
+        "sort": 1,
+        "is_link": false,
+        "is_catalog": false,
+        "web_path": "/containerCluster",
+        "component": "container/cluster/index",
+        "component_name": "containerCluster",
+        "status": true,
+        "cache": false,
+        "visible": true,
+        "parent": 288,
+        "children": [],
+        "menu_button": [
+          {
+            "name": "查询",
+            "value": "Search",
+            "api": "/api/container/cluster/",
+            "method": 0
+          },
+          {
+            "name": "详情",
+            "value": "Retrieve",
+            "api": "/api/container/cluster/{id}/",
+            "method": 0
+          },
+          {
+            "name": "新增",
+            "value": "Create",
+            "api": "/api/container/cluster/",
+            "method": 1
+          },
+          {
+            "name": "编辑",
+            "value": "Update",
+            "api": "/api/container/cluster/{id}/",
+            "method": 2
+          },
+          {
+            "name": "删除",
+            "value": "Delete",
+            "api": "/api/container/cluster/{id}/",
+            "method": 3
+          }
+        ]
+      },
+      {
+        "name": "节点",
+        "icon": "linode",
+        "sort": 2,
+        "is_link": false,
+        "is_catalog": false,
+        "web_path": "/containerNode",
+        "component": "container/node/index",
+        "component_name": "containerNode",
+        "status": true,
+        "cache": false,
+        "visible": true,
+        "parent": 288,
+        "children": [],
+        "menu_button": [
+          {
+            "name": "查询",
+            "value": "Search",
+            "api": "/api/container/node/",
+            "method": 0
+          },
+          {
+            "name": "详情",
+            "value": "nodeDetail",
+            "api": "/api/container/node_detail/{node_name}/",
+            "method": 0
+          },
+          {
+            "name": "污点管理",
+            "value": "nodeTaint",
+            "api": "/api/container/node/node_taint/",
+            "method": 0
+          },
+          {
+            "name": "标签管理",
+            "value": "nodeLabel",
+            "api": "/api/container/node/node_label/",
+            "method": 0
+          },
+          {
+            "name": "节点删除",
+            "value": "nodeDelete",
+            "api": "/api/container/node/",
+            "method": 3
+          },
+          {
+            "name": "调度配置",
+            "value": "nodeSchedule",
+            "api": "/api/container/node/",
+            "method": 0
+          },
+          {
+            "name": "节点排水",
+            "value": "nodeDrain",
+            "api": "/api/container/node_drain/{node_name}/",
+            "method": 0
+          }
+        ]
+      },
+      {
+        "name": "工作负载",
+        "icon": "bar-chart",
+        "sort": 3,
+        "is_link": false,
+        "is_catalog": true,
+        "web_path": "",
+        "component": "",
+        "component_name": "",
+        "status": true,
+        "cache": false,
+        "visible": true,
+        "parent": null,
+        "children": [
+          {
+            "name": "deployment",
+            "icon": "clone",
+            "sort": 1,
+            "is_link": false,
+            "is_catalog": false,
+            "web_path": "/deployment",
+            "component": "container/workload/deployment/index",
+            "component_name": "deployment",
+            "status": true,
+            "cache": false,
+            "visible": true,
+            "parent": 288,
+            "children": [],
+            "menu_button": [
+              {
+                "name": "查询",
+                "value": "Search",
+                "api": "/api/container/deployment/dep_list/",
+                "method": 0
+              },
+              {
+                "name": "详情",
+                "value": "Retrieve",
+                "api": "/api/container/deployment/dep_detail/",
+                "method": 0
+              },
+              {
+                "name": "删除",
+                "value": "deploymentDelete",
+                "api": "/api/container/deployment/dep_delete/",
+                "method": 3
+              },
+              {
+                "name": "预览/编辑YAML",
+                "value": "deploymentEdit",
+                "api": "/api/container/deployment/dep_yaml/",
+                "method": 0
+              },
+              {
+                "name": "重启",
+                "value": "deploymentRestart",
+                "api": "/api/container/deployment/dep_restart/",
+                "method": 1
+              },
+              {
+                "name": "调整镜像版本",
+                "value": "deploymentImageChange",
+                "api": "/api/container/deployment/dep_image_update/",
+                "method": 0
+              },
+              {
+                "name": "历史版本/回滚",
+                "value": "deploymentHistoryVersion",
+                "api": "/api/container/deployment/dep_history/",
+                "method": 0
+              },
+              {
+                "name": "伸缩",
+                "value": "deploymentReplicas",
+                "api": "/api/container/deployment/dep_replicas/",
+                "method": 2
+              }
+            ]
+          },
+          {
+            "name": "创建工作负载",
+            "icon": "plus-square-o",
+            "sort": 2,
+            "is_link": false,
+            "is_catalog": false,
+            "web_path": "/workloadCreate",
+            "component": "container/workload/workloadCreate/index",
+            "component_name": "workloadCreate",
+            "status": true,
+            "cache": false,
+            "visible": true,
+            "parent": 288,
+            "children": [],
+            "menu_button": []
+          }
+        ],
+        "menu_button": []
+      },
+      {
+        "name": "服务",
+        "icon": "snowflake-o",
+        "sort": 4,
+        "is_link": false,
+        "is_catalog": false,
+        "web_path": "/containerService",
+        "component": "container/service/index",
+        "component_name": "containerService",
+        "status": true,
+        "cache": false,
+        "visible": true,
+        "parent": 288,
+        "children": [],
+        "menu_button": [
+          {
+            "name": "查询",
+            "value": "Search",
+            "api": "/api/container/service/",
+            "method": 0
+          },
+          {
+            "name": "详情",
+            "value": "serviceDetail",
+            "api": "/api/container/service/svc_detail/",
+            "method": 0
+          },
+          {
+            "name": "修改",
+            "value": "serviceEdit",
+            "api": "/api/container/service/",
+            "method": 1
+          },
+          {
+            "name": "YAML",
+            "value": "serviceYaml",
+            "api": "/api/container/service/svc_yaml/",
+            "method": 0
+          },
+          {
+            "name": "删除",
+            "value": "serviceDelete",
+            "api": "/api/container/service/svc_delete/",
+            "method": 3
+          }
+        ]
+      },
+      {
+        "name": "应用路由",
+        "icon": "gears",
+        "sort": 7,
+        "is_link": false,
+        "is_catalog": false,
+        "web_path": "/containerIngress",
+        "component": "container/ingress/index",
+        "component_name": "containerIngress",
+        "status": true,
+        "cache": false,
+        "visible": true,
+        "parent": 288,
+        "children": [],
+        "menu_button": [
+          {
+            "name": "查询",
+            "value": "Search",
+            "api": "/api/container/ingress/",
+            "method": 0
+          },
+          {
+            "name": "详情",
+            "value": "ingressDetail",
+            "api": "/api/container/ingress/ing_detail/",
+            "method": 0
+          },
+          {
+            "name": "YAML",
+            "value": "ingressYaml",
+            "api": "/api/container/ingress/ing_yaml/",
+            "method": 0
+          },
+          {
+            "name": "编辑",
+            "value": "ingressEdit",
+            "api": "/api/container/ingress/ing_detail/",
+            "method": 0
+          },
+          {
+            "name": "删除",
+            "value": "ingressDelete",
+            "api": "/api/container/ingress/ing_delete/",
             "method": 3
           }
         ]

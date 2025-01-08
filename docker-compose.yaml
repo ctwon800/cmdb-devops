@@ -1,4 +1,8 @@
-version: "3"
+networks:
+  cmdb-network:
+    driver: bridge
+
+
 services:
   mysql:
     image: mysql:8.0
@@ -10,7 +14,7 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - mysql_data:/var/lib/mysql
+      - ./mysql-data:/var/lib/mysql
     command: --default-authentication-plugin=mysql_native_password
     networks:
       - cmdb-network
@@ -23,7 +27,7 @@ services:
     ports:
       - "6379:6379"
     volumes:
-      - redis_data:/data
+      - ./redis-data:/data
     command: redis-server --appendonly yes --requirepass redis123@abc111
     networks:
       - cmdb-network
@@ -65,11 +69,9 @@ services:
     volumes:
       - ./cmdb/media:/media
       - ./cmdb/static:/static
-    environment:
-      - VUE_APP_API_URL=http://cmdb-backend:8000
     networks:
       - cmdb-network
 
-networks:
-  cmdb-network:
-    driver: bridge
+
+
+
