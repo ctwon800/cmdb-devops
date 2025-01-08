@@ -1,0 +1,51 @@
+[
+    {
+        "name": "每月更新云账号费用",
+        "task": "task_celery.tasks.autoUpdateCloudCost_task",
+        "enabled": false,
+        "description": "每月更新云账号的费用",
+        "crontab": 1
+    },
+    {
+        "name": "自动更新云服务器",
+        "task": "task_celery.tasks.autoUpdateYunRes_task",
+        "enabled": false,
+        "description": "自动更新云服务器",
+        "crontab": 1
+    },
+    {
+        "name": "域名信息每日更新",
+        "task": "task_celery.tasks.auto_update_domain_monitors",
+        "enabled": false,
+        "description": "域名信息每日更新",
+        "crontab": 1
+    },
+    {
+        "name": "web站点监控",
+        "task": "task_celery.tasks.auto_update_web_monitors",
+        "enabled": false,
+        "description": "web站点监控，每天定时运行",
+        "crontab": 1
+    },
+    {
+        "name": "web站点域名更新",
+        "task": "task_celery.tasks.auto_update_web_monitors_domain",
+        "enabled": false,
+        "description": "web站点域名每次更新，更新的来源是k8s集群",
+        "crontab": 1
+    },
+    {
+        "name": "ssl证书每日更新",
+        "task": "task_celery.tasks.auto_update_aliyun_account_ssl",
+        "enabled": false,
+        "description": "ssl证书每天更新",
+        "crontab": 1
+    },
+    {
+        "name": "ssl证书域名更新",
+        "task": "task_celery.tasks.auto_update_ssl_monitors_domain",
+        "enabled": false,
+        "description": "ssl证书域名每日更新，目前主要是阿里云数字证书管理服务中申请免费证书的域名和k8s域名",
+        "crontab": 1
+    }
+]

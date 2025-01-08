@@ -16,3 +16,7 @@ mysql-data/
 redis-data/
 .idea/
 cmdb/
+backend/gunicorn.pid
+backend/gunicorn.log
+backend/supervisord.log
+backend/supervisord.pid
