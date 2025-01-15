@@ -1116,6 +1116,76 @@
             "method": 3
           }
         ]
+      },
+      {
+        "name": "批量主机任务",
+        "icon": "angle-double-up",
+        "sort": 2,
+        "is_link": false,
+        "is_catalog": false,
+        "web_path": "/batchCommandTask",
+        "component": "celery/batchCommandTask/index",
+        "component_name": "batchCommandTask",
+        "status": true,
+        "cache": false,
+        "visible": true,
+        "parent": 288,
+        "children": [],
+        "menu_button": [
+          {
+            "name": "查询",
+            "value": "Search",
+            "api": "/api/celery/batch_command_record/",
+            "method": 0
+          },
+          {
+            "name": "详情",
+            "value": "Retrieve",
+            "api": "/api/celery/batch_command_record/{id}/",
+            "method": 0
+          },
+          {
+            "name": "结果查看",
+            "value": "batchCommandResult",
+            "api": "/api/celery/batch_command_record/{id}/",
+            "method": 0
+          }
+        ]
+      },
+      {
+        "name": "批量命令执行记录",
+        "icon": "navicon",
+        "sort": 3,
+        "is_link": false,
+        "is_catalog": false,
+        "web_path": "/batchCommandRecord",
+        "component": "celery/batchCommandRecord/index",
+        "component_name": "batchCommandRecord",
+        "status": true,
+        "cache": false,
+        "visible": true,
+        "parent": 288,
+        "children": [],
+        "menu_button": [
+          {
+            "name": "查询",
+            "value": "Search",
+            "api": "/api/cmdb/server_group/",
+            "method": 0
+          },
+          {
+            "name": "新增",
+            "value": "Create",
+            "api": "/api/cmdb/server_group/",
+            "method": 1
+          },
+          {
+            "name": "编辑",
+            "value": "Update",
+            "api": "/api/cmdb/server_group/{id}/",
+            "method": 2
+          }
+        ]
       }
     ],
     "menu_button": []

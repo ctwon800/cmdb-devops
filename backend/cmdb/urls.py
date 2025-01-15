@@ -8,7 +8,7 @@ from cmdb.views.cloud_cost import CloudCostViewSet
 from cmdb.views.server_remote_account import ServerRemoteAccountViewSet
 from cmdb.views.server_remote_record import ServerRemoteRecordViewSet
 from monitors.views.ssl_monitors import SSLMonitorsViewSet
-
+from cmdb.views.server_group import ServerGroupViewSet
 
 cmdb_url = routers.SimpleRouter()
 cmdb_url.register(r'server_instance', ServerInstanceViewSet)
@@ -18,6 +18,7 @@ cmdb_url.register(r'cloud_cost', CloudCostViewSet)
 cmdb_url.register(r'server_remote_account', ServerRemoteAccountViewSet)
 cmdb_url.register(r'server_remote_record', ServerRemoteRecordViewSet)
 cmdb_url.register(r'ssl_monitors', SSLMonitorsViewSet)
+cmdb_url.register(r'server_group', ServerGroupViewSet)
 
 
 devops_url = routers.SimpleRouter()

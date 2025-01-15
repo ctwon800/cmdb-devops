@@ -147,6 +147,48 @@ class ServerInstanceViewSet(CustomModelViewSet):
         }
         return JsonResponse(message, safe=False)
 
+    @action(methods=['GET'], detail=False, permission_classes=[IsAuthenticated])
+    def get_instances_exclude_group(self, request):
+        """获取不在指定组内的所有服务器"""
+        group_id = request.GET.get('group_id')
+        if not group_id:
+            message = {
+                "code": 4000,
+                "msg": "缺少group_id参数",
+                "data": None
+            }
+            return JsonResponse(message)
+        
+        # 检查组是否存在
+        if not models.ServersGroup.objects.filter(id=group_id).exists():
+            message = {
+                "code": 4000,
+                "msg": "指定的组不存在",
+                "data": None
+            }
+            return JsonResponse(message)
+            
+        # 如果组存在但没有服务器，直接返回所有服务器
+        group = models.ServersGroup.objects.get(id=group_id)
+        if not group.server_instances.exists():
+            instances = models.ServerInstance.objects.all().values('id', 'instanceid', 'instancename')
+        else:
+            # 获取指定组内的所有服务器ID
+            group_instances = group.server_instances.all().values_list('id', flat=True)
+            # 排除这些服务器
+            instances = models.ServerInstance.objects.exclude(
+                id__in=group_instances
+            ).values('id', 'instancename', 'instanceid', 'hostname', 'public_ip', 'primary_ip')
+        
+        message = {
+            "code": 2000,
+            "msg": "success",
+            "data": {
+                "data": list(instances)
+            }
+        }
+        return JsonResponse(message)
+
 
 # if __name__ == '__main__':
 #     test_in()

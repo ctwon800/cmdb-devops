@@ -7,6 +7,8 @@ from dvadmin.utils.json_response import DetailResponse
 from rest_framework import serializers
 from django.views.decorators.csrf import csrf_exempt
 import json
+from django.db.models import Q
+import logging
 
 class ServerRemoteAccountSerializer(CustomModelSerializer):
     """
@@ -46,14 +48,18 @@ class ServerRemoteAccountViewSet(CustomModelViewSet):
     @action(methods=["GET"], detail=False, permission_classes=[IsAuthenticated])
     def ser_remote_account_exclude(self, request):
         """
-        查询所有没有绑定远程账号的服务器信息
+        查询未绑定账号和绑定指定账号的服务器信息
         :param request:
         :return:
         """
         remote_account_id = request.GET.get("obj")
-        remote_account_detail_exclude = ServerInstance.objects.filter(remote_auth_id__isnull=False).exclude(remote_auth_id=remote_account_id).values_list('instancename', flat=True)
+        # 使用Q对象组合两个查询条件
+        servers = ServerInstance.objects.filter(
+            Q(remote_auth_id__isnull=True) | Q(remote_auth_id=remote_account_id)
+        ).values_list('instancename', flat=True)
+        
         data = {
-            'remote_account_detail_exclude': remote_account_detail_exclude
+            'remote_account_detail_exclude': list(servers)
         }
         return DetailResponse(data=data, msg="获取成功")
 
@@ -63,6 +69,7 @@ class ServerRemoteAccountViewSet(CustomModelViewSet):
     def ser_remote_account_detail(self, request):
         remote_account_id = request.GET.get("obj")
         remote_account_detail = ServerInstance.objects.filter(remote_auth_id=remote_account_id).values_list('instancename', flat=True)
+        logging.info(f'已绑定账号的服务器 f{remote_account_detail}')
         data = {
             'remote_account_detail': remote_account_detail
         }
@@ -72,36 +79,26 @@ class ServerRemoteAccountViewSet(CustomModelViewSet):
     @action(methods=['POST'], detail=False, permission_classes=[IsAuthenticated])
     def update_ser_remote_account(self, request, my_id=None):
         myid = my_id
-        db_records = ServerInstance.objects.filter(remote_auth_id=myid).values_list('instancename', flat=True)
-        print(db_records)
         data = json.loads(request.body.decode())
-        print(data)
-        db_records_to_change = []
-        for db_record in db_records:
-            print(db_record)
-            if db_record not in [recode['label'] for recode in data]:
-                db_records_to_change.append(db_record)
-        print("123")
-        print(db_records_to_change)
-        for record in db_records_to_change:
-            ServerInstance.objects.filter(instancename=record).update(remote_auth_id=None)
-        for recode in data:
-            print(recode)
-            print("开始更新该条记录")
-            instance_name = recode['label']
-            print(instance_name)
-            ServerInstance.objects.filter(instancename=instance_name).update(remote_auth_id=myid)
-        #
-        # for i in data:
-        #     print(i)
-        #     print(i['label'])
-        # for db_record in db_records:
-        # a = 0
-        # for a  data.lenth:
-        #     print(i)
-        # 213
-        # remote_account_detail = ServerInstance.objects.filter(remote_auth_id=remote_account_id).values_list('instancename', flat=True)
-        # data = {
-        #     'remote_account_detail': remote_account_detail
-        # }
+        
+        # 获取当前已绑定该账号的所有服务器
+        current_bound_servers = ServerInstance.objects.filter(
+            remote_auth_id=myid
+        ).values_list('instancename', flat=True)
+        
+        # 将要解绑的服务器（在current_bound_servers中但不在data中的服务器）
+        servers_to_unbind = set(current_bound_servers) - set(data)
+        if servers_to_unbind:
+            logging.info(f'以下服务器将解除账号绑定: {servers_to_unbind}')
+            ServerInstance.objects.filter(
+                instancename__in=servers_to_unbind
+            ).update(remote_auth_id=None)
+        
+        # 更新或绑定data中的服务器
+        for server_name in data:
+            logging.info(f'服务器 {server_name} 开始更新并绑定账号 {myid}')
+            ServerInstance.objects.filter(
+                instancename=server_name
+            ).update(remote_auth_id=myid)
+            
         return DetailResponse(msg="更新完成")

@@ -53,14 +53,27 @@ def get_aws_server_instance(server_platform_id, account_name_id, aws_access_key_
                 'instanceid': instanceid
             }
             ec2_instanceid_list.append(instance_info)
+            instancename = ''
+            if 'Tags' in instance:
+                for tag in instance['Tags']:
+                    if tag['Key'] == 'Name':
+                        instancename = tag['Value']
+                    else:
+                        instancename = instance['PrivateDnsName']
+            # 获取实例类型信息
+            instance_type_info = ec2.describe_instance_types(
+                InstanceTypes=[instance['InstanceType']]
+            )['InstanceTypes'][0]
+
             defaults = {'server_platform_id': server_platform_id,
                         'account_name_id': account_name_id,
-                        'instancename': get_tag(Tags, 'Name'),
+                        'instancename': instancename,
                         'instancetype': instance['InstanceType'],
                         'region': region,
                         'ostype': instance['PlatformDetails'],
                         'zone': instance['Placement']['AvailabilityZone'],
-                        'cpu': instance['CpuOptions']['CoreCount'],
+                        'cpu': instance_type_info['VCpuInfo']['DefaultVCpus'],
+                        'memory': f"{instance_type_info['MemoryInfo']['SizeInMiB']/1024:.0f}",
                         'public_ip': instance['PublicIpAddress'],
                         'primary_ip': instance['PrivateIpAddress'],
                         'status': instance['State']['Name']

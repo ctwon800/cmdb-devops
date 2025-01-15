@@ -118,7 +118,8 @@ def process_single_uri(uri):
                 conn.rollback()
                 raise e
                 
-        return True
+        # return True
+        return f" {uri} 监控更新成功, 状态为 {web_status}"
         
     except Exception as e:
         logging.error(f"处理 {uri} 时发生错误: {str(e)}")

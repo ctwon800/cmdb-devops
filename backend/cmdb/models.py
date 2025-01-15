@@ -49,6 +49,14 @@ class ServerInstance(models.Model):
     start_time = models.CharField("启动时间", max_length=255, null=True, help_text="启动时间", blank=True)
     insert_time = models.DateTimeField("插入时间", null=True, auto_now_add=True, help_text="插入时间")
     update_time = models.DateTimeField("更新时间", null=True, auto_now=True, help_text="更新时间")
+    server_groups = models.ManyToManyField(
+        "ServersGroup", 
+        blank=True,
+        related_name="server_instances",
+        verbose_name="服务器组",
+        help_text="服务器所属的服务器组"
+    )
+    
 
     def __str__(self):
         return self.instanceid
@@ -113,3 +121,18 @@ class ServerRemoteRecord(models.Model):
 
     class Meta:
         db_table = "cmdb_server_remote_record"
+
+class ServersGroup(models.Model):
+    group_name = models.CharField(max_length=255)
+    # servers_group = models.TextField(verbose_name='服务器列表', help_text='使用逗号分隔的服务器列表')
+
+    insert_time = models.DateTimeField("插入时间", null=True, auto_now_add=True, help_text="插入时间")
+    update_time = models.DateTimeField("更新时间", null=True, auto_now=True, help_text="更新时间")
+
+    def __str__(self):
+        return self.group_name
+
+    
+    class Meta:
+        ordering = ["id"]
+        db_table = "cmdb_servers_group"
