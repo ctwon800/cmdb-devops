@@ -49,18 +49,15 @@
       :visible.sync="dialogServerRemoteVisible"
       width="80%">
       <el-transfer
+        :key="dialogServerRemoteVisible"
         filterable
-        props: row.id
         v-model="value"
-        :render-content="renderFunc"
         :data="transferData"
-        :titles="['Source', 'Target']"
+        :titles="['未关联服务器', '已关联服务器']"
         :format="{
           noChecked: '${total}',
           hasChecked: '${checked}/${total}'
-        }"
-        @change="handleChange"
-        style="el-transfer-panel:350px">
+        }">
       </el-transfer>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogServerRemoteVisible = false">取 消</el-button>
@@ -74,7 +71,7 @@
 import * as api from './api'
 import { crudOptions } from './crud'
 import { d2CrudPlus } from 'd2-crud-plus'
-import { request } from '@/api/service'
+// import { request } from '@/api/service'
 export default {
   name: 'cmdb-server-remote-account',
   mixins: [d2CrudPlus.crud],
@@ -84,11 +81,7 @@ export default {
       transferData: [],
       value: [],
       returnData: [],
-      my_id: '',
-      // valueData: [],
-      renderFunc(h, option) {
-        return <span>{ option.label }</span>
-      }
+      my_id: ''
     }
   },
   methods: {
@@ -113,57 +106,23 @@ export default {
     serverAssociate({ row }) {
       this.my_id = row.id
       this.dialogServerRemoteVisible = true
+      this.transferData = []
+      this.value = []
+      // 获取所有可选服务器
       api.GetServerRemoteAccounExclude(row.id).then((res) => {
-        this.returnDataExclude = res.data.remote_account_detail_exclude
-      })
-      request({
-        url: '/api/cmdb/server_remote_account/ser_remote_account/'
-      }).then((res) => {
-        this.returnData = res.data.server_no_remote_account
-        const data = []
-        console.log(this.returnData)
-        const generateData = _ => {
-          for (let i = 0; i < this.returnData.length; i++) {
-            const trueOrFalse = _ => {
-              for (let m = 0; m < this.returnDataExclude.length; m++) {
-                if (this.returnData[i] === this.returnDataExclude[m]) {
-                  return true
-                } else {
-                  return false
-                }
-              }
-            }
-            data.push({
-              key: i,
-              label: this.returnData[i],
-              disabled: trueOrFalse()
-              // disabled: i % 4 === 0
-            })
-          }
-          console.log('909090')
-          console.log(data)
-          return data
-        }
-        this.transferData = generateData()
-      })
-      api.GetServerRemoteAccounDetail(row.id).then(res => {
-        this.my_value = res.data.remote_account_detail
-        console.log(this.my_value)
-        const valueData = _ => {
-          const data = []
-          for (let i = 0; i < this.my_value.length; i++) {
-            for (let m = 0; m < this.returnData.length; m++) {
-              if (this.my_value[i] === this.returnData[m]) {
-                data.push(m)
-              }
-            }
-          }
-          console.log(data)
-          return data
-        }
-        this.value = valueData()
-        console.log('1111')
-        console.log(this.value)
+        this.transferData = res.data.remote_account_detail_exclude.map((item, index) => ({
+          key: index,
+          label: item, // 根据实际数据结构选择合适的显示字段
+          disabled: false
+        }))
+        // 获取已关联的服务器
+        api.GetServerRemoteAccounDetail(row.id).then(res => {
+          // this.value = res.data.remote_account_detail
+          const selectedServers = res.data.remote_account_detail
+          this.value = this.transferData
+            .filter(item => selectedServers.includes(item.label))
+            .map(item => item.key)
+        })
       })
     },
     onExport () {
@@ -177,22 +136,18 @@ export default {
         return api.exportData({ ...query })
       })
     },
-    handleChange(value, direction, movedKeys) {
-      console.log(value, direction, movedKeys)
-    },
     submitServerRemote () {
-      const updateData = []
-      for (const item of this.value) {
-        console.log(item)
-        updateData.push(this.transferData[item])
-      }
+      // 根据选中的索引获取对应的服务器标签
+      const updateData = this.value.map(index => {
+        const selectedItem = this.transferData.find(item => item.key === index)
+        return selectedItem.label
+      })
+      console.log(updateData)
       this.dialogServerRemoteVisible = false
-      // console.log(updateData)
       api.UpdateServerRemoteAccount(updateData, this.my_id).then(res => {
-        console.log(res)
         this.$message({
           message: '更新完成',
-          duration: 5,
+          duration: 3000,
           type: 'success'
         })
       })
@@ -208,6 +163,6 @@ export default {
   }
 }
 .el-transfer-panel {
-  width: auto
+  width: auto;
 }
 </style>

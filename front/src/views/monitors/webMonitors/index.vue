@@ -63,13 +63,13 @@
           placeholder="请输入网站地址搜索"
           prefix-icon="el-icon-search"
           clearable
-          @keyup.enter.native="handleSearch"
-          @clear="handleClear"
+          @keyup.enter.native="handleSearchUnmonitor"
+          @clear="handleClearUnmonitor"
         >
           <el-button
             slot="append"
             icon="el-icon-search"
-            @click="handleSearch">
+            @click="handleSearchUnmonitor">
             查询
           </el-button>
         </el-input>
@@ -262,11 +262,11 @@ export default {
         })
       })
     },
-    handleSearch() {
+    handleSearchUnmonitor() {
       this.unmonitorWebPagination.currentPage = 1
       this.loadUnmonitorWebList(1)
     },
-    handleClear() {
+    handleClearUnmonitor() {
       this.searchQuery = ''
       this.loadUnmonitorWebList(1)
     }

@@ -117,7 +117,7 @@ export const crudOptions = (vm) => {
             showPassword: true,
             placeholder: '请输入密码'
           },
-          editDisabled: false,
+          editDisabled: true,
           itemProps: {
             class: { yxtInput: true }
           }
