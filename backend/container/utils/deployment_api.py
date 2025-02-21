@@ -5,6 +5,7 @@ import pytz
 import logging
 from django.utils import timezone
 from kubernetes.client import ApiException
+import time
 
 
 def remove_none(data):

@@ -46,7 +46,8 @@ def execute_command(server, command, callback):
         # 认证逻辑
         try:
             if server.remote_auth.remote_type == 1:
-                pkey = paramiko.RSAKey.from_private_key_file('')
+                private_key_file = server.remote_auth.remote_private_key
+                pkey = paramiko.RSAKey.from_private_key_file(private_key_file)
                 ssh.connect(hostname=host, username=username, pkey=pkey)
             else:
                 ssh.connect(hostname=host, username=username, password=password)

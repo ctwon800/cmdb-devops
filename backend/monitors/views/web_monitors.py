@@ -16,9 +16,9 @@ import json
 from monitors.utils.web_domain_monitoring import check_web_status
 from monitors.views.ssl_monitors import update_k8s_cluster_domain
 
-def notify_ding_talk(uri, web_status):
+def notify_ding_talk(uri, web_status, consecutive_errors):
     # 钉钉通知
-    content = f"""\n![web站点异常](https://q5.itc.cn/images01/20240129/c88baac1abc64da8be22ad8b6acb0f65.jpeg)\n ### web站点异常提醒\n - 站点uri：{uri}\n - 站点状态：{web_status}
+    content = f"""\n![web站点异常](https://q5.itc.cn/images01/20240129/c88baac1abc64da8be22ad8b6acb0f65.jpeg)\n ### web站点异常提醒\n - 站点uri：{uri}\n - 站点状态：{web_status}\n - 站点连续检测异常：{consecutive_errors}次
     """
     # 获取钉钉配置
     access_token = dispatch.get_system_config_values("configdingtalk.access_token")
@@ -107,12 +107,20 @@ def process_single_uri(uri):
                 # 提交事务
                 conn.commit()
                 
+                # 从最新记录开始计算连续异常的次数
+                consecutive_errors = 0
+                for status in recent_results:  # recent_results已经是按时间倒序排列
+                    if status == "异常":
+                        consecutive_errors += 1
+                    else:
+                        break
+
                 if len(recent_results) >= 3 and all(status == "异常" for status in recent_results[:3]):
                     if len(recent_results) >= 10 and all(status == "异常" for status in recent_results):
                         logging.error(f"网站 {uri} 连续10次检测均显示异常，不再进行通知钉钉")
                     else:
-                        logging.error(f"网站 {uri} 最近连续三次检测均显示异常，通知钉钉")
-                        notify_ding_talk(uri, web_status)
+                        logging.error(f"网站 {uri} 最近连续五次检测均显示异常，通知钉钉")
+                        notify_ding_talk(uri, web_status, consecutive_errors)
                 
             except Exception as e:
                 conn.rollback()
